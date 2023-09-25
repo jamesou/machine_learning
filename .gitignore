@@ -162,3 +162,6 @@ mlruns/
 mlruns
 Mlflow-Diabetes-Prediction-Pipeline/mlruns/
 Mlflow-Diabetes-Prediction-Pipeline/mlruns
+.ipynb_checkpoints
+Mlflow-Diabetes-Prediction-Pipeline/.ipynb_checkpoints
+Mlflow-Diabetes-Prediction-Pipeline/.ipynb_checkpoints/

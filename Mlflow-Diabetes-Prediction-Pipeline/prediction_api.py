@@ -7,7 +7,7 @@ mlflow.set_experiment('diabetes_prediction')
 mlflow.set_tracking_uri("http://localhost:5000/") # Actual Server URI instead of localhost
 # load model
 # todo dynamically get model file from DB
-logged_model = 'runs:/af15394323534cac9f0ce983c736e88e/Random_Forest'
+logged_model = 'runs:/06ee6a895e1940209727f39762db50e7/Random_Forest'
 # Load model as a PyFuncModel.
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 # api
