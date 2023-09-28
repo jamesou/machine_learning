@@ -7,7 +7,7 @@ mlflow.set_experiment('diabetes_prediction')
 mlflow.set_tracking_uri("http://localhost:5000/") # Actual Server URI instead of localhost
 # load model
 # todo dynamically get model file from DB
-logged_model = 'runs:/06ee6a895e1940209727f39762db50e7/Random_Forest'
+logged_model = 'runs:/722ef20d376e487ea5819de56baf4bf1/Random_Forest'
 # Load model as a PyFuncModel.
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 # api
@@ -47,14 +47,14 @@ def diabetes_predict():
     df = cover_input_data(json_data)
     print(df)
     json_data[0]['diabetes_predict'] = loaded_model.predict(df)[0]
-    #todo 3.design a web page for patient to use this functionality
+    #todo  1.design a web page for patient to use this functionality
     return str(json_data)
 
 def cover_input_data(json_data):
-    #todo 1.select patient's info from db(Data Lakehouse) accroding to name，2.get features from table
-    #Q1: Do i need to design webpage? Q2: Do i need to use Pyspark as calculate engine(It mentioned by paper)
-    #Q3: Should I save these data(feature data,patience data etc) into DB or Data Lakehosue?
-    #    If yes, Do I use my mac pc to install lakehouse? Is there free platform for student research?
+    #todo 2.change to spark engine(doing) and create table in delta lakehouse
+    #     3.query patient's info from db(Delta Lakehouse) accroding to input parameters
+    #     4.get model features and configurations data from tables
+
     df = pd.DataFrame.from_dict(json_data)
     df_encoded = pd.get_dummies(df, columns=['gender', 'smoking_history'])
     columns = ['gender_Female', 'gender_Male',
