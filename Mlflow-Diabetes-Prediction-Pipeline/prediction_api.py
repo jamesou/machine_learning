@@ -7,7 +7,7 @@ mlflow.set_experiment('diabetes_prediction')
 mlflow.set_tracking_uri("http://localhost:5000/") # Actual Server URI instead of localhost
 # load model
 # todo dynamically get model file from DB
-logged_model = 'runs:/722ef20d376e487ea5819de56baf4bf1/Random_Forest'
+logged_model = 'runs:/d9537959aaf545d0a33e1bb5338b311e/Random_Forest'
 # Load model as a PyFuncModel.
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 # api
@@ -57,24 +57,30 @@ def cover_input_data(json_data):
 
     df = pd.DataFrame.from_dict(json_data)
     df_encoded = pd.get_dummies(df, columns=['gender', 'smoking_history'])
-    columns = ['gender_Female', 'gender_Male',
-       'gender_Other', 'smoking_history_No Info', 'smoking_history_current',
-       'smoking_history_ever', 'smoking_history_former',
-       'smoking_history_never', 'smoking_history_not current']
-    for column in columns:
-        add_column_to_dataframe(df_encoded, column)
+    columns = ['age', 'hypertension', 'heart_disease', 'bmi',
+    'HbA1c_level', 'blood_glucose_level', 'gender_Female',
+    'gender_Male', 'gender_Other',
+    'smoking_history_No Info', 'smoking_history_current',
+    'smoking_history_ever', 'smoking_history_former', 'smoking_history_never',
+    'smoking_history_not current'] #features have the same order with fit
+    # to fix the bug 'The feature names should match those that were passed during fit.' copy encoded df to sorted df
+    df_encoded_sorted = pd.DataFrame([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],columns=columns)
+    # print(df_encoded_sorted['gender_Female'])
+    set_value_to_sorted_dataframe(df_encoded,columns,df_encoded_sorted)
     # cast type to int
-    # print(df_encoded['gender_Female'])
-    df_encoded[columns] = df_encoded[columns].astype(int)
-    # print(df_encoded['gender_Female'])
-    return df_encoded
+    columns = ['gender_Female', 'gender_Male',
+               'gender_Other', 'smoking_history_No Info', 'smoking_history_current',
+               'smoking_history_ever', 'smoking_history_former',
+               'smoking_history_never', 'smoking_history_not current']
+    df_encoded_sorted[columns] = df_encoded_sorted[columns].astype(int)
+    # print(df_encoded_sorted['gender_Female'])
+    return df_encoded_sorted
 
-def add_column_to_dataframe(df,name):
-    if name in df.columns:
-        print('The column '+name+' exists in the DataFrame.')
-    else:
-        print('The column '+name+' does not exist in the DataFrame.')
-        df[name]=0
+def set_value_to_sorted_dataframe(df,columns,df_sorted):
+    for name in columns:
+        if name in df.columns:
+            print('The column '+name+' exists in the DataFrame.')
+            df_sorted[name]=df[name]
 
 if __name__ == "__main__":
     app.run(port=8000,debug=True)
