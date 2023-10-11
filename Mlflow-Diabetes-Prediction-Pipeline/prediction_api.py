@@ -1,5 +1,6 @@
 import json
 from flask import Flask, request,jsonify
+from flask_cors import CORS
 import mlflow
 import pandas as pd
 
@@ -12,7 +13,7 @@ logged_model = 'runs:/d9537959aaf545d0a33e1bb5338b311e/Random_Forest'
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 # api
 app = Flask(__name__)
-
+CORS(app)
 # functions
 @app.route('/diabetes_predict', methods=['POST'])
 def diabetes_predict():
@@ -46,15 +47,16 @@ def diabetes_predict():
     print(json_data)
     df = cover_input_data(json_data)
     print(df)
-    json_data[0]['diabetes_predict'] = loaded_model.predict(df)[0]
+    result = loaded_model.predict(df)[0]
+    json_data[0]['diabetes_predict'] = result
     #todo  1.design a web page for patient to use this functionality
-    return str(json_data)
+    print(json_data)
+    return str(result)
 
 def cover_input_data(json_data):
     #todo 2.change to spark engine(doing) and create table in delta lakehouse
     #     3.query patient's info from db(Delta Lakehouse) accroding to input parameters
     #     4.get model features and configurations data from tables
-
     df = pd.DataFrame.from_dict(json_data)
     df_encoded = pd.get_dummies(df, columns=['gender', 'smoking_history'])
     columns = ['age', 'hypertension', 'heart_disease', 'bmi',

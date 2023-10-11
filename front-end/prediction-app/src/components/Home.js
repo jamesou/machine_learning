@@ -1,11 +1,12 @@
-import React from 'react'
+import * as React from 'react'
 import axios from 'axios';
 import * as settings from '../settings';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Paper, Typography, Slider, Button } from '@material-ui/core';
-
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, Grid, Paper, Typography, Slider, Button} from '@material-ui/core';
+import {TextField, Select,MenuItem,Box,InputLabel,FormControl} from '@material-ui/core';
+ 
+ 
 // ########################################################
 // Material UI inline styles
 // ########################################################
@@ -36,33 +37,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // ########################################################
-// Our Custom IRIS slider. You may use the default slider instead of this
+// Our Custom slider. You may use the default slider instead of this
 // ########################################################
-const IrisSlider = withStyles({
-    root: {
-        color: '#751E66',
-    },
-    valueLabel: {
-        left: 'calc(-50% -2)',
-        top: -22,
-        '& *': {
-            background: 'transparent',
-            color: '#000',
-        },
-    },
-    mark: {
-        height: 8,
-        width: 1,
-        marginTop: -3,
-    },
-    markActive: {
-        opacity: 1,
-        backgroundColor: 'currentColor',
-    },
-})(Slider);
-
-// Marks on the slider track
-const marks = [{ value: 0 }, { value: 10 }];
+// const MySlider = withStyles({
+//     root: {
+//         color: '#751E66',
+//     },
+//     valueLabel: {
+//         left: 'calc(-50% -2)',
+//         top: -22,
+//         '& *': {
+//             background: 'transparent',
+//             color: '#000',
+//         },
+//     },
+//     mark: {
+//         height: 8,
+//         width: 1,
+//         marginTop: -3,
+//     },
+//     markActive: {
+//         opacity: 1,
+//         backgroundColor: 'currentColor',
+//     },
+// })(Slider);
 
 // ########################################################
 // The main Home component returned by this Module
@@ -73,13 +71,15 @@ function Home(props) {
 
     // React hook state variable - Dimensions
     const [dimensions, setDimensions] = React.useState({
-        sepal_length: 6,
-        sepal_width: 6,
-        petal_length: 6,
-        petal_width: 6,
+        gender:'Male',
+        age:35,
+        hypertension:0,
+        heart_disease:0,
+        smoking_history:'No Info',
+        bmi: 20.5,
+        HbA1c_level: 5.0,
+        blood_glucose_level: 80
     });
-    // React hook state variable - Prediction
-    const [prediction, setPrediction] = React.useState(null)
 
     // Function to update the Dimensions state upon slider value change
     const handleSliderChange = name => (event, newValue) => {
@@ -90,32 +90,50 @@ function Home(props) {
             }
         );
     };
+    
+    const handleChange = (name)=>(event) => {
+        setDimensions(
+            {
+                ...dimensions,
+                ...{ [name]: event.target.value }
+            }
+        );
+    };
+
+     // React hook state variable - Prediction
+     const [prediction, setPrediction] = React.useState('click predict button to get result');
+
 
     // Function to make the predict API call and update the state variable - Prediction 
     const handlePredict = event => {
-        // Submit Iris Flower measured dimensions as form data
-        let irisFormData = new FormData();
-        irisFormData.append("sepal length (cm)", dimensions.sepal_length);
-        irisFormData.append("sepal width (cm)", dimensions.sepal_width);
-        irisFormData.append("petal length (cm)", dimensions.petal_length);
-        irisFormData.append("petal width (cm)", dimensions.petal_width);
-
+        // Submit measured dimensions as form data
+        console.log(dimensions)
+        const jsonArray = [];
+        jsonArray.push(dimensions)
+        const jsonString = JSON.stringify(jsonArray);
+        console.log(jsonString)
+        const jsonObject = JSON.parse(jsonString);
+        console.log(jsonObject)
         //Axios variables required to call the predict API
         let headers = { 'Authorization': `Token ${props.token}` };
-        let url = settings.API_SERVER + '/api/predict/';
+        let url = settings.API_SERVER + '/diabetes_predict';
         let method = 'post';
-        let config = { headers, method, url, data: irisFormData };
-
+        let config = { headers, method, url, data: jsonObject };
         //Axios predict API call
-        axios(config).then(
-            res => {setPrediction(res.data["Predicted Diabetes"])
-            }).catch(
-                error => {alert(error)})
-
-    }
-
-    function valuetext(value) {
-        return `${value} cm`;
+        axios(config)
+        .then(res => {
+            const result = res.data;
+            if(result=='0') {
+                setPrediction(<font color='green'>congratulations! No diabetes risk.</font>)
+            }
+            else if(result=='1') {
+                setPrediction(<font color='red'>It is crucial to be mindful of the risk of diabetes.</font>)
+            }else {
+                setPrediction("Prediction error, please adjust dimentions and try it again!")
+            }
+        })
+        .catch(error => {alert(error)});
+        console.log(prediction)
     }
 
     return (
@@ -130,65 +148,97 @@ function Home(props) {
                             </Typography>
                         </Paper>
                         <Paper className={classes.sliders}>
-                            <Typography id="sepal_length" variant="caption" >
-                                age 
+                        <Box>
+                            <FormControl variant="standard">
+                                <TextField id="age-component" label="Age" style={{ width: '380px' }} 
+                                value={dimensions.age} onChange={handleChange('age')}/>
+                            </FormControl>
+                            <FormControl variant="standard">
+                            <InputLabel id="gender-select-label">Gender</InputLabel>
+                            <Select style={{ width: '190px' }}
+                            labelId="gender-select-label"
+                            id="gender-select"
+                            label="Gender" value={dimensions.gender} onChange={handleChange('gender')}>
+                            <MenuItem value={'Male'}>Male</MenuItem>
+                            <MenuItem value={'Female'}>Female</MenuItem>
+                            <MenuItem value={'Other'}>Other</MenuItem>
+                            </Select> 
+                        </FormControl>
+                        <FormControl variant="standard">
+                            <InputLabel id="heart-disease-select-label">Heart_Disease</InputLabel>
+                            <Select style={{ width: '190px' }}
+                            labelId="heart-disease-select-label"
+                            id="heart-disease-select"
+                            label="Heart_Disease" value={dimensions.heart_disease} onChange={handleChange('heart_disease')}>
+                            <MenuItem value={0}>No</MenuItem>
+                            <MenuItem value={1}>Yes</MenuItem>
+                            </Select> 
+                        </FormControl>
+                        <FormControl variant="standard">
+                        <InputLabel id="hypertension-select-label">Hypertension</InputLabel>
+                            <Select style={{ width: '190px' }}
+                            labelId="hypertension-select-label"
+                            id="hypertension-select"
+                            label="Hypertension" value={dimensions.hypertension} onChange={handleChange('hypertension')}>
+                            <MenuItem value={0}>No</MenuItem>
+                            <MenuItem value={1}>Yes</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="standard">
+                        <InputLabel id="smoke-history-select-label">Smoke_History</InputLabel>
+                            <Select style={{ width: '190px' }}
+                            labelId="smoke-history-select-label"
+                            id="smoke-history-select"
+                            label="Smoke_History" value={dimensions.smoking_history} onChange={handleChange('smoking_history')}>
+                            <MenuItem value={'No Info'}>No Info</MenuItem>
+                            <MenuItem value={'current'}>Current</MenuItem>
+                            <MenuItem value={'ever'}>Ever</MenuItem>
+                            <MenuItem value={'former'}>Former</MenuItem>
+                            <MenuItem value={'never'}>Never</MenuItem>
+                            <MenuItem value={'not current'}>Not current</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </Box>
+                        </Paper>
+                        <Paper className={classes.sliders}>
+                            <Typography id="bmi_text" variant="body1" gutterBottom>
+                                BMI 
                             </Typography>
-                            <IrisSlider
-                                defaultValue={6}
-                                getAriaValueText={valuetext}
-                                aria-labelledby="sepal_length"
+                            <Slider
+                                defaultValue={20.5}
+                                aria-labelledby="bmi"
                                 step={0.1}
                                 min={0}
-                                max={10}
+                                max={100}
                                 valueLabelDisplay="on"
-                                marks={marks}
                                 className={classes.slidertop}
-                                onChange={handleSliderChange("sepal_length")}
+                                onChange={handleSliderChange("bmi")}
                             />
-                            <Typography id="sepal_width" variant="caption" gutterBottom>
-                                bmi 
+                            <Typography id="hba1c_text" variant="body1" gutterBottom>
+                                HbA1c_level (%)
                             </Typography>
-                            <IrisSlider
-                                defaultValue={6}
-                                getAriaValueText={valuetext}
-                                aria-labelledby="sepal_width"
+                            <Slider
+                                defaultValue={5.0}
+                                aria-labelledby="HbA1c_level"
                                 step={0.1}
-                                min={0}
-                                max={10}
+                                min={0.1}
+                                max={20}
                                 valueLabelDisplay="on"
-                                marks={marks}
                                 className={classes.slidertop}
-                                onChange={handleSliderChange("sepal_width")}
+                                onChange={handleSliderChange("HbA1c_level")}
                             />
-                            <Typography id="petal_length" variant="caption" gutterBottom>
-                                HbA1c_level
+                            <Typography id="blood_text" variant="body1" gutterBottom>
+                                Blood_glucose_level (mg/dL)
                             </Typography>
-                            <IrisSlider
-                                defaultValue={6}
-                                getAriaValueText={valuetext}
-                                aria-labelledby="petal_length"
-                                step={0.1}
-                                min={0}
-                                max={10}
+                            <Slider
+                                defaultValue={80}
+                                aria-labelledby="blood_glucose_level"
+                                step={1}
+                                min={1}
+                                max={200}
                                 valueLabelDisplay="on"
-                                marks={marks}
                                 className={classes.slidertop}
-                                onChange={handleSliderChange("petal_length")}
-                            />
-                            <Typography id="petal_width" variant="caption" gutterBottom>
-                                blood_glucose_level
-                            </Typography>
-                            <IrisSlider
-                                defaultValue={6}
-                                getAriaValueText={valuetext}
-                                aria-labelledby="petal_width"
-                                step={0.1}
-                                min={0}
-                                max={10}
-                                valueLabelDisplay="on"
-                                marks={marks}
-                                className={classes.slidertop}
-                                onChange={handleSliderChange("petal_width")}
+                                onChange={handleSliderChange("blood_glucose_level")}
                             />
                         </Paper>
                     </Grid>
