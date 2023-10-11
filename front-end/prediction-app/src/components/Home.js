@@ -124,10 +124,12 @@ function Home(props) {
         .then(res => {
             const result = res.data;
             if(result=='0') {
-                setPrediction(<font color='green'>congratulations! No diabetes risk.</font>)
+                const smile_img = require('../imgs/smile.jpg');
+                setPrediction(<font color='green'>congratulations! No diabetes risk.<img src={smile_img} style={{ width: 40, height: 40 }}/></font>)
             }
             else if(result=='1') {
-                setPrediction(<font color='red'>It is crucial to be mindful of the risk of diabetes.</font>)
+                const sad_img = require('../imgs/sad.jpg');
+                setPrediction(<font color='red'>It's crucial to be mindful of the risk of diabetes.<img src={sad_img} style={{ width: 40, height: 40 }}/></font>)
             }else {
                 setPrediction("Prediction error, please adjust dimentions and try it again!")
             }

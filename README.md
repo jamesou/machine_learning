@@ -5,6 +5,6 @@ Based on this architecture mentioned in the paper above, it can provide all type
 ## Snapshots
 ![Login Page](front-end/prediction-app/public/login.jpg)
 ![Initiate Page](front-end/prediction-app/public/initiate.jpg)
-![Normal](front-end/prediction-app/public/normal.jpg)
-![Risked](front-end/prediction-app/public/risked.jpg)
+![Normal](front-end/prediction-app/public/normal.png)
+![Risked](front-end/prediction-app/public/risked.png)
  
