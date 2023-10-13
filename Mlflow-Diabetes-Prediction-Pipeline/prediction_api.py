@@ -4,6 +4,7 @@ from flask_cors import CORS
 import mlflow
 import pandas as pd
 
+#TODO Parameterised constant
 mlflow.set_experiment('diabetes_prediction')
 mlflow.set_tracking_uri("http://localhost:5000/") # Actual Server URI instead of localhost
 # load model
@@ -14,21 +15,10 @@ loaded_model = mlflow.pyfunc.load_model(logged_model)
 # api
 app = Flask(__name__)
 CORS(app)
-# functions
+# API that returns prediction result in JSON
 @app.route('/diabetes_predict', methods=['POST'])
 def diabetes_predict():
-    '''
-    API that returns prediction result in JSON
-    Returns:
-        json_result
-    '''
     print("access diabetes_predict method")
-    # turple_data = {"age": 39, "hypertension": 1, "heart_disease": 0, "bmi": 79, "HbA1c_level": 8.8,
-    #              "blood_glucose_level": 145, "gender_Female": 1, "gender_Male": 0, "gender_Other": 0,
-    #              "smoking_history_No Info": 1, "smoking_history_current": 0, "smoking_history_ever": 0,
-    #              "smoking_history_former": 0, "smoking_history_never": 0, "smoking_history_not current": 0},
-    # dict_data = {'gender': 'Female', 'age': 39, 'hypertension': 1, 'heart_disease': 0, 'smoking_history': 'No Info',
-    #              'bmi': 79, 'HbA1c_level': 8.8, 'blood_glucose_level': 145},
     '''
     Collect some data from internet
     Hypertension: Prevalence in females aged 35-44: 10.8%, So hypertension is 0
@@ -49,14 +39,10 @@ def diabetes_predict():
     print(df)
     result = loaded_model.predict(df)[0]
     json_data[0]['diabetes_predict'] = result
-    #todo  1.design a web page for patient to use this functionality
     print(json_data)
     return str(result)
 
 def cover_input_data(json_data):
-    #todo 2.change to spark engine(doing) and create table in delta lakehouse
-    #     3.query patient's info from db(Delta Lakehouse) accroding to input parameters
-    #     4.get model features and configurations data from tables
     df = pd.DataFrame.from_dict(json_data)
     df_encoded = pd.get_dummies(df, columns=['gender', 'smoking_history'])
     columns = ['age', 'hypertension', 'heart_disease', 'bmi',
