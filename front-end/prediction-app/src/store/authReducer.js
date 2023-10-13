@@ -34,8 +34,6 @@ const authSuccessReducer = (state,action) => {
     });
 }
 const authFailReducer = (state , action) =>{
-    console.log(state)
-    console.log(action)
     return updateObject(state , {
         error : action.error,
         loading : false

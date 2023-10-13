@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as actionTypes from './authActionTypes';
 import * as settings from '../settings';
 
@@ -12,7 +11,7 @@ const SESSION_DURATION = settings.SESSION_DURATION
     // b) Perform some action and then return an Action Objet
 // 2) Return A Dispatch(Action) combination
     // a)Perform an action then return a Dispatch(Action) combination. 
-        // This Dispatch(Action) could be used by some other function to dispatch action to the store      
+    // This Dispatch(Action) could be used by some other function to dispatch action to the store      
 // ########################################################
 // ########################################################
 
@@ -60,12 +59,6 @@ export const authLogout = () => {
     };
 }
 
-// ########################################################
-// ########################################################
-// Auth Action Functions returning A Dispatch(Action) combination after performing some action
-// ########################################################
-// ########################################################
-
 // This sets a timer, which would automatically logout the user after a specified time
 export const authCheckTimeout = expirationTime => {
     return dispatch => {
@@ -86,8 +79,7 @@ export const authLogin = (username, password) => {
             dispatch(authSuccess(token));
             dispatch(authCheckTimeout(SESSION_DURATION));
         }else{
-            const errorMsg = 'user name or password incorrect'
-            dispatch(authFail(errorMsg))
+            dispatch(authFail('user name or password incorrect'))
         }
         // axios.post(`${settings.API_SERVER}/api/auth/login/`, {
         //     username: username,
@@ -107,7 +99,7 @@ export const authLogin = (username, password) => {
     }
 }
 
-
+// Refresh Token timeout
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');

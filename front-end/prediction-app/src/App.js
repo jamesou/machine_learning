@@ -1,5 +1,5 @@
 import React from 'react';
-import Urls from './Urls';
+import Urls from './components/Urls';
 import Layout from './components/Layout';
 import {connect} from 'react-redux';
 import * as actions from './store/authActions';

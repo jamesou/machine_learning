@@ -44,11 +44,12 @@ function Login(props) {
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
-  console.log(props)
   React.useEffect(() => {
     if (props.isAuthenticated) { history.replace(from) };
   });
 
+  //state is initiated in reducer and retrive value by state.reducer(register name).props
+  const loginError = useSelector((state) => state.auth.error);
 
   const handleFormFieldChange = (event) => {
     switch (event.target.id) {
@@ -62,15 +63,8 @@ function Login(props) {
     e.preventDefault();
     props.onAuth(username, password);
   }
-  const value = useSelector((action) => action.value);
-  console.log(value)
-  const data = useSelector((state) => state.data);
-  console.log(data) //研究一下传值
-  let errorMsg = null;
-  if(props.isAuthenticated==false){
-    errorMsg = 'please input correct username and password';
-  }
-
+ 
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -82,7 +76,7 @@ function Login(props) {
           Sign in
         </Typography>
         <Typography  variant="caption" style={{ color: 'red' }}>
-         {errorMsg}
+         {loginError}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
