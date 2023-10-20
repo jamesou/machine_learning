@@ -48,7 +48,8 @@ def initiate_model():
         model_features = df.loc[0, 'model_features'].split(',')
         print(model_features)
         mlflow.set_experiment(ml_experiment)
-        mlflow.set_tracking_uri(mlflow_url) # Actual Server URI instead of localhost
+        mlflow.set_tracking_uri(mlflow_url) 
+        # Actual Server URI instead of localhost
         # load model
         # dynamically get model file from DB
         logged_model = 'runs:/'+model_id+'/'+model_name
@@ -116,5 +117,6 @@ def set_value_to_sorted_dataframe(df,columns,df_sorted):
             df_sorted[name]=df[name]
 
 if __name__ == "__main__":
-    #set the startup parameters and use_reloader=False to improve performance and reduce multiple loading
+    #set the port=8000
+    #set use_reloader=False to improve performance and reduce multiple loading
     app.run(port=8000,debug=True,use_reloader=False)
