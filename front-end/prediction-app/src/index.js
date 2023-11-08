@@ -12,3 +12,4 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+document.title = 'Prediction Diabetes'

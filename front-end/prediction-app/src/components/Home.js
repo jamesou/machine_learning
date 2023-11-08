@@ -220,6 +220,7 @@ function Home(props) {
                                 HbA1c_level (%)
                             </Typography>
                             <Slider
+                                id="HbA1c_level"
                                 defaultValue={5.0}
                                 aria-labelledby="HbA1c_level"
                                 step={0.1}
@@ -245,7 +246,7 @@ function Home(props) {
                         </Paper>
                     </Grid>
                     <Grid item xs={2}>
-                        <Button variant="contained" color="primary" onClick={handlePredict}>
+                        <Button variant="contained" color="primary" onClick={handlePredict} id='prediction_button'>
                             Predict
                         </Button>
                     </Grid>
@@ -254,7 +255,7 @@ function Home(props) {
                             <Typography variant="caption" display="inline">
                                 Predicted Results: <span>&nbsp;</span>
                             </Typography>
-                            <Typography variant="body1" display="inline">
+                            <Typography variant="body1" display="inline" id="prediction_result">
                                 {prediction}
                             </Typography>
                         </Paper>

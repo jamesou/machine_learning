@@ -75,7 +75,7 @@ function Login(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Typography  variant="caption" style={{ color: 'red' }}>
+        <Typography  variant="caption" style={{ color: 'red' }} id='loginError'>
          {loginError}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
@@ -108,6 +108,7 @@ function Login(props) {
             fullWidth
             variant="contained"
             color="primary"
+            id="login_button"
             className={classes.submit}
           >
             Sign In
