@@ -2,11 +2,13 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 class PredictionDiabetes(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
     login_url = "http://localhost:3000/login/"
     home_url = "http://localhost:3000/"
     index_title = "Prediction Diabetes"
@@ -48,6 +50,7 @@ class PredictionDiabetes(unittest.TestCase):
         self.login() 
         driver = self.driver
         prediction_button = driver.find_element(By.ID,"prediction_button")
+        time.sleep(2)
         prediction_button.click()
         prediction_result = driver.find_element(By.ID,"prediction_result")
         time.sleep(2)
@@ -59,17 +62,30 @@ class PredictionDiabetes(unittest.TestCase):
         driver = self.driver
         #adjust the HbA1c_level parameter
         HbA1c_level_Span = driver.find_element(By.ID,'HbA1c_level')
-        #input label hidden in span label
+        #Find the hidden input field inside the <span> element
         input_hidden = HbA1c_level_Span.find_element(By.TAG_NAME,'input')
         #Get the value from the <input> element
         input_value = input_hidden.get_attribute('value')
-        #set the new value
-        input_value = 7.0
+        print("oldvalue:"+input_value)
+        # Create an ActionChains object
+        action_chains = ActionChains(driver)
+        offset = -45
+        # Calculate the desired value
+        x_offset = float(input_value)+float(offset)
+        print(f"x_offset:",x_offset)
+        # Perform the mouse drag operation to adjust the Slider's value
+        action_chains.move_to_element(HbA1c_level_Span).click_and_hold().move_by_offset(x_offset, 0).perform()
+        # Release the mouse button
+        action_chains.release().perform()
+        # Get new value
+        input_value = input_hidden.get_attribute('value')
+        print("newvalue:"+input_value)
         prediction_button = driver.find_element(By.ID,"prediction_button")
+        time.sleep(2)
         prediction_button.click()
         time.sleep(2)
         prediction_result = driver.find_element(By.ID,"prediction_result")
-        self.assertIn("congratulations! No diabetes risk",prediction_result.text,"Didn't got the risk prompt")
+        self.assertIn("It's crucial to be mindful of the risk of diabetes",prediction_result.text,"Didn't got the risk prompt")
     
     def login(self):
         self.driver.get(self.login_url)
@@ -77,7 +93,7 @@ class PredictionDiabetes(unittest.TestCase):
         password = self.driver.find_element(By.NAME,"password")
         username.send_keys("admin")
         password.send_keys("admin")
-        time.sleep(2)
+        time.sleep(1)
         password.send_keys(Keys.RETURN)
         
     def tearDown(self):
