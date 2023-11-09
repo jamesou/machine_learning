@@ -56,7 +56,7 @@ def initiate_model():
         # Load model as a PyFuncModel.
         global loaded_model
         loaded_model = mlflow.pyfunc.load_model(logged_model)
-        spark.__exit__()
+        spark.stop()
 # api
 app = Flask(__name__)
 # fix cross domain issue
