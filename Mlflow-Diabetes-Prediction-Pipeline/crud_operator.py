@@ -78,20 +78,21 @@ def use_spark_sql():
 def load_cvs_data():
     with get_delta_spark() as spark:
         #load csv file
-        csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/patient.csv"       
-        spark.sql(f"INSERT INTO machine_learning.patient SELECT * FROM csv.`{csv_file_path}`")
-        csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/diagnosis.csv"       
-        spark.sql(f"INSERT INTO machine_learning.diagnosis SELECT * FROM csv.`{csv_file_path}`")
-        csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/lifestyle.csv"       
-        spark.sql(f"INSERT INTO machine_learning.lifestyle SELECT * FROM csv.`{csv_file_path}`")
-        csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/blood_glucose.csv"       
-        spark.sql(f"INSERT INTO machine_learning.blood_glucose SELECT * FROM csv.`{csv_file_path}`")
-
+        # csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/patient.csv"       
+        # spark.sql(f"INSERT INTO machine_learning.patient SELECT * FROM csv.`{csv_file_path}`")
+        # csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/diagnosis.csv"       
+        # spark.sql(f"INSERT INTO machine_learning.diagnosis SELECT * FROM csv.`{csv_file_path}`")
+        # csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/lifestyle.csv"       
+        # spark.sql(f"INSERT INTO machine_learning.lifestyle SELECT * FROM csv.`{csv_file_path}`")
+        # csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/datafiles/blood_glucose.csv"       
+        # spark.sql(f"INSERT INTO machine_learning.blood_glucose SELECT * FROM csv.`{csv_file_path}`")
+        csv_file_path = "/Users/jamesoujamesou/Downloads/sit_thesis/IT819/implementation/machine_learning/Mlflow-Diabetes-Prediction-Pipeline/ADP_All_Measures.csv"       
+        spark.sql(f"INSERT INTO machine_learning.ADP_All_Measures SELECT * FROM csv.`{csv_file_path}`")
 if __name__ == "__main__":
     try:
         #use_delta_api()
-        use_spark_sql()
-        # load_cvs_data()
+        # use_spark_sql()
+        load_cvs_data()
     finally:
         sys.exit(0)
 

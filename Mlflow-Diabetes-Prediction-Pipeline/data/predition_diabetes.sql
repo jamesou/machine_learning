@@ -49,3 +49,13 @@ l.smoking_history,l.bmi,b.HbA1c_level,b.blood_glucose_level,d.diabetes from pati
 left join diagnosis d on p.id = d.id
 left join lifestyle l on p.id = l.id
 left join blood_glucose b on p.id = b.id limit 10
+
+
+CREATE TABLE machine_learning.ADP_All_Measures (
+    Month STRING,
+    Area_type STRING,
+    Area STRING,
+    Property STRING,
+    Measure STRING,
+    Value STRING
+) USING DELTA;
