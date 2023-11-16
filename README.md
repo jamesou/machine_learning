@@ -1,8 +1,8 @@
 # machine_learning project
 ## 1. Introduction
-This project is developed for diabetes prediction. We use these main streaming components,which are React, Flask, Conda, Jupyter, Pyspark, Sklearn, MLflow, Delta lakehouse, to implement the system. 
-## 2. DataSource
-We get the dataset from Kaggle platform. You also can download diabetes_prediction_dataset.csv in this repository.
+This project is developed for diabetes prediction. We use these main streaming components, which are React, Flask, Conda, Jupyter, Pyspark, Sklearn, MLflow, and Delta Lakehouse, to implement the system.
+## 2. DataSet
+We get the dataset from the Kaggle platform. You can also download diabetes_prediction_dataset.csv from this repository.
 ## 3. Install libraries
 * Python 3.9.18
 * Flask 2.2.2
@@ -23,15 +23,15 @@ We get the dataset from Kaggle platform. You also can download diabetes_predicti
 * redux 4.0.5
 * pytest 7.4.3
 ## 4. Train the models
-jupyter file diabetes_prediction.ipynb, you can run the file in jupyter server
+Jupiter file diabetes_prediction.ipynb, you can run the file in Jupiter server
 ## 5. Test the models
 pytest automative_test.py --html=./test_reports/model_and_web_test_report.html
 
-## Architecture diagram
+## 6. Architecture diagram
 ![Based on kappa architecture adapts to various types of data](Mlflow-Diabetes-Prediction-Pipeline/data/1695960956040.jpg)
 
 Based on the architecture mentioned in the paper above, it can provide all types of data to support and optimise the process of machine learning applications in various industries. For instance, there are image recognition and classification, natural language processing, recommendation systems, medical diagnosis, financial risk control, industrial manufacturing, autonomous driving, game intelligence, network security, environmental protection, and so on. In this paper, we take the implementation of diabetes prediction in the medical industry as a case study for concrete code implementation.
-## Snapshots
+## 7. Snapshots
 ![Login Page](front-end/prediction-app/public/login.jpg)
 ![Initiate Page](front-end/prediction-app/public/initiate.jpg)
 ![Normal](front-end/prediction-app/public/normal.png)
