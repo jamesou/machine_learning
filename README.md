@@ -1,4 +1,32 @@
 # machine_learning project
+## 1. Introduction
+This project is developed for diabetes prediction. We use these main streaming components,which are React, Flask, Conda, Jupyter, Pyspark, Sklearn, MLflow, Delta lakehouse, to implement the system. 
+## 2. DataSource
+We get the dataset from Kaggle platform. You also can download diabetes_prediction_dataset.csv in this repository.
+## 3. Install libraries
+* Python 3.9.18
+* Flask 2.2.2
+* jupyterlab 3.6.3
+* mlflow 2.6.0
+* testbook 0.4.2
+* selenium 4.15.2
+* seaborn 0.12.2
+* scikit-learn 1.2.2
+* pyspark 3.3.1
+* delta-spark 2.2.0
+* conda 4.12.0
+* npm 9.5.1
+* node 18.16.0
+* material-ui 4.11.2
+* axios 0.21.0
+* react 17.0.1
+* redux 4.0.5
+* pytest 7.4.3
+## 4. Train the models
+jupyter file diabetes_prediction.ipynb, you can run the file in jupyter server
+## 5. Test the models
+pytest automative_test.py --html=./test_reports/model_and_web_test_report.html
+
 ## Architecture diagram
 ![Based on kappa architecture adapts to various types of data](Mlflow-Diabetes-Prediction-Pipeline/data/1695960956040.jpg)
 
